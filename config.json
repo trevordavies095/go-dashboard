@@ -1,3 +1,13 @@
 {
-    "name": "Trevor"
+    "name": "Trevor",
+    "dark-mode": true,
+    "bookmark1name": "Messenger",
+    "bookmark1url": "https://messenger.com",
+    "bookmark2name": "Reddit",
+    "bookmark2url": "https://old.reddit.com",
+    "bookmark3name": "Twitter",
+    "bookmark3url": "https://twitter.com",
+    "darksky-secretkey": "6f3045de80632288fe8dddb2004c30c5",
+    "lat": "43.152",
+    "lon": "-77.597"
 }
