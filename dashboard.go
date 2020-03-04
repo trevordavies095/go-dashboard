@@ -30,12 +30,12 @@ type Config struct {
 	WeatherData      struct {
 		TodayIcon       string
 		TodaySummary    string
-		TodayHigh       float64
-		TodayLow        float64
+		TodayHigh       int
+		TodayLow        int
 		TomorrowIcon    string
 		TomorrowSummary string
-		TomorrowHigh    float64
-		TomorrowLow     float64
+		TomorrowHigh    int
+		TomorrowLow     int
 	}
 }
 
@@ -149,12 +149,12 @@ func getWeather() {
 
 	config.WeatherData.TodayIcon = today["icon"].(string)
 	config.WeatherData.TodaySummary = today["summary"].(string)
-	config.WeatherData.TodayHigh = today["temperatureHigh"].(float64)
-	config.WeatherData.TodayLow = today["temperatureLow"].(float64)
+	config.WeatherData.TodayHigh = int(today["temperatureHigh"].(float64))
+	config.WeatherData.TodayLow = int(today["temperatureLow"].(float64))
 	config.WeatherData.TomorrowIcon = tomorrow["icon"].(string)
 	config.WeatherData.TomorrowSummary = tomorrow["summary"].(string)
-	config.WeatherData.TomorrowHigh = tomorrow["temperatureHigh"].(float64)
-	config.WeatherData.TomorrowLow = tomorrow["temperatureLow"].(float64)
+	config.WeatherData.TomorrowHigh = int(tomorrow["temperatureHigh"].(float64))
+	config.WeatherData.TomorrowLow = int(tomorrow["temperatureLow"].(float64))
 }
 
 func search(w http.ResponseWriter, s Search) {
