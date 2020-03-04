@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -21,26 +22,34 @@ type Config struct {
 	Bookmark3Name    string `json:"bookmark3name"`
 	Bookmark3URL     string `json:"bookmark3url"`
 	Name             string `json:"name"`
+	Greeting         string
 	WelcomeMsg       string
 	DarkSkySecretKey string `json:"darksky-secretkey"`
 	Lat              string `json:"lat"`
 	Lon              string `json:"lon"`
 	WeatherData      struct {
+		TodayIcon       string
 		TodaySummary    string
 		TodayHigh       float64
 		TodayLow        float64
+		TomorrowIcon    string
 		TomorrowSummary string
 		TomorrowHigh    float64
 		TomorrowLow     float64
 	}
 }
 
-// WeatherData holds data from DarkSky call
+// WeatherAPI holds data from DarkSky call
 type WeatherAPI struct {
 	Daily struct {
 		Icon string                   `json:"icon"`
 		Days []map[string]interface{} `json:"data"`
 	} `json:"daily"`
+}
+
+// Search struct to hold search query
+type Search struct {
+	Search string
 }
 
 // Global constants
@@ -77,13 +86,22 @@ func index(w http.ResponseWriter, r *http.Request) {
 	// Local constants
 
 	// Local variables
+	var s Search
 
 	/****** start index() ******/
 
-	genWelcomeMsg()
-	getWeather()
+	// Search
+	if r.Method == http.MethodPost {
+		s.Search = r.FormValue("search-entry")
+		search(w, s)
+	} else {
+		fmt.Println(s.Search)
 
-	tpl.ExecuteTemplate(w, "index.html", config)
+		genWelcomeMsg()
+		getWeather()
+
+		tpl.ExecuteTemplate(w, "index.html", config)
+	}
 }
 
 func genWelcomeMsg() {
@@ -98,13 +116,13 @@ func genWelcomeMsg() {
 	/****** start genWelcomeMsg() ******/
 
 	if hour >= 5 && hour < 12 {
-		config.WelcomeMsg = "Good morning "
+		config.Greeting = "Good morning, " + config.Name
 	} else if hour >= 12 && hour < 17 {
-		config.WelcomeMsg = "Good afternoon "
+		config.Greeting = "Good afternoon, " + config.Name
 	} else {
-		config.WelcomeMsg = "Good evening "
+		config.Greeting = "Good evening, " + config.Name
 	}
-	config.WelcomeMsg += config.Name + ". Today is " + weekday + ", " + month.String() + " " + strconv.Itoa(day) + ", " + strconv.Itoa(year) + "."
+	config.WelcomeMsg = "Today is " + weekday + ", " + month.String() + " " + strconv.Itoa(day) + ", " + strconv.Itoa(year) + "."
 }
 
 func getWeather() {
@@ -129,12 +147,29 @@ func getWeather() {
 	today := weatherAPI.Daily.Days[0]
 	tomorrow := weatherAPI.Daily.Days[1]
 
+	config.WeatherData.TodayIcon = today["icon"].(string)
 	config.WeatherData.TodaySummary = today["summary"].(string)
 	config.WeatherData.TodayHigh = today["temperatureHigh"].(float64)
 	config.WeatherData.TodayLow = today["temperatureLow"].(float64)
+	config.WeatherData.TomorrowIcon = tomorrow["icon"].(string)
 	config.WeatherData.TomorrowSummary = tomorrow["summary"].(string)
 	config.WeatherData.TomorrowHigh = tomorrow["temperatureHigh"].(float64)
 	config.WeatherData.TomorrowLow = tomorrow["temperatureLow"].(float64)
+}
+
+func search(w http.ResponseWriter, s Search) {
+	// Local constants
+	const googleURL = "https://www.google.com/search?q="
+
+	// Local variables
+
+	/****** start search() ******/
+
+	s.Search = googleURL + strings.Replace(s.Search, " ", "+", -1)
+
+	fmt.Println(s.Search)
+	tpl.ExecuteTemplate(w, "search.html", s)
+
 }
 
 func openConfig() Config {

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-  <title>Go-Dashboard</title>
+  <title>Go Dashboard</title>
 </head>
 
 <body>
@@ -36,21 +36,33 @@
     </div>
   </nav>
   <div class="jumbotron">
-    <h1 class="display-4">Hello {{.Name}}!</h1>
+    <h1 class="display-4">{{.Greeting}}!</h1>
     <p class="lead">{{.WelcomeMsg}}</p>
     <hr class="my-4">
     <center>
+      <form method="POST">
+        <div class="col-4 input-group mb-3">
+          <input type="text" name="search-entry" class="form-control" placeholder="Search..." aria-label="Search..."
+            aria-describedby="Search..." autofocus>
+          <div class="input-group-append">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
       <h2>Weather</h2>
       <div class="container">
         <div class="row">
           <div class="col">
             <h4>Today</h4>
+            <img src="https://darksky.net/images/weather-icons/{{.WeatherData.TodayIcon}}.png" width="40" height="40">
             <h6>Summary: {{.WeatherData.TodaySummary}}</h6>
             <h6>High: {{.WeatherData.TodayHigh}}&#8457;</h6>
             <h6>Low: {{.WeatherData.TodayLow}}&#8457;</h6>
           </div>
           <div class="col">
             <h4>Tomorrow</h4>
+            <img src="https://darksky.net/images/weather-icons/{{.WeatherData.TomorrowIcon}}.png" width="40"
+              height="40">
             <h6>Summary: {{.WeatherData.TomorrowSummary}}</h6>
             <h6>High: {{.WeatherData.TomorrowHigh}}&#8457;</h6>
             <h6>Low: {{.WeatherData.TomorrowLow}}&#8457;</h6>
@@ -58,7 +70,8 @@
         </div>
       </div>
     </center>
-    <a class="btn btn-primary btn-lg" href="https://darksky.net/forecast/{{.Lat}},{{.Lon}}" role="button">Full forecast</a>
+    <a class="btn btn-primary btn-lg" href="https://darksky.net/forecast/{{.Lat}},{{.Lon}}" role="button">Full
+      forecast</a>
   </div>
 
   <!-- Optional JavaScript -->
