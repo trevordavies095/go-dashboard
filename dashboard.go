@@ -47,7 +47,7 @@ type WeatherAPI struct {
 	} `json:"daily"`
 }
 
-// Search struct to hold search query
+// Search struct to hold search query, passed into search template
 type Search struct {
 	Search string
 }
@@ -90,16 +90,13 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	/****** start index() ******/
 
-	// Search
+	// Check to see if user is searching
 	if r.Method == http.MethodPost {
 		s.Search = r.FormValue("search-entry")
 		search(w, s)
 	} else {
-		fmt.Println(s.Search)
-
 		genWelcomeMsg()
 		getWeather()
-
 		tpl.ExecuteTemplate(w, "index.html", config)
 	}
 }
@@ -166,8 +163,6 @@ func search(w http.ResponseWriter, s Search) {
 	/****** start search() ******/
 
 	s.Search = googleURL + strings.Replace(s.Search, " ", "+", -1)
-
-	fmt.Println(s.Search)
 	tpl.ExecuteTemplate(w, "search.html", s)
 
 }
