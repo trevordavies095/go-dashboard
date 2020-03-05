@@ -1,6 +1,5 @@
-![Go-Dashboard](https://i.imgur.com/zCXysP1.png)
-
 # Go Dashboard
+![Go-Dashboard](https://i.imgur.com/zCXysP1.png)
 This is a project I'm currently working on while learning Go. So you will need to be able to run Golang programs to utilize this.
 
 Go Dashboard is simply a page to replace your favorites window/tab when opening a new internet window/tab. Pretty straight forward.
